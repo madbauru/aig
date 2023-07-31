@@ -6,4 +6,5 @@ urlpatterns = [
     path('progress', views.progress, name='progress'),
     path('choose_product', views.choose_product, name='choose_product'),
     path('customize', views.customize, name='customize'),
+    path('preview', views.preview, name='preview'),
 ]

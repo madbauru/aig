@@ -83,3 +83,10 @@ def customize(request):
         return HttpResponseRedirect('/preview')
     else:
         return render(request, 'customize.html')
+
+def preview(request):
+    # Obtenha o último upload do usuário
+    upload = Upload.objects.last()
+
+    # Renderizar a página de visualização
+    return render(request, 'preview.html', {'upload': upload})
