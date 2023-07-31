@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personalização do Produto</title>
+</head>
+<body>
+    <h1>Personalize seu Produto</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Título:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="author">Autor:</label><br>
+        <input type="text" id="author" name="author"><br>
+        <input type="submit" value="Personalizar">
+    </form>
+</body>
+</html>
