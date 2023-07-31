@@ -76,8 +76,23 @@ def customize(request):
         upload = Upload.objects.last()
 
         # Atualize o campo do título do e-book com o título enviado pelo usuário
-        upload.title = request.POST['title']
-        upload.save()
+        upload.ebook_title = request.POST.get('ebook_title', '')
+        upload.blog_title = request.POST.get('blog_title', '')
+
+        # Use GPT-3 para gerar o conteúdo do e-book ou post de blog
+        try:
+            print("Iniciando geração de conteúdo com GPT-3...")
+            response = openai.Completion.create(
+                engine="text-davinci-002",
+                prompt=upload.results,
+                temperature=0.5,
+                max_tokens=1000
+            )
+            upload.generated_content = response.choices[0].text.strip()
+            upload.save()
+            print("Geração de conteúdo com GPT-3 concluída com sucesso.")
+        except Exception as e:
+            print(f"Erro durante a geração de conteúdo com GPT-3: {e}")
 
         # Redirecione o usuário para a página de visualização
         return HttpResponseRedirect('/preview')

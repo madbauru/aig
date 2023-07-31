@@ -5,11 +5,13 @@
 </head>
 <body>
     <h1>Personalizar Produto</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="ebook_title">Título do E-book:</label>
-        <input type="text" id="ebook_title" name="ebook_title">
-        <input type="submit" value="Submit">
-    </form>
+   <form method="post">
+    {% csrf_token %}
+    <label for="ebook_title">Título do eBook:</label><br>
+    <input type="text" id="ebook_title" name="ebook_title"><br>
+    <label for="blog_title">Título do Post do Blog:</label><br>
+    <input type="text" id="blog_title" name="blog_title"><br>
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

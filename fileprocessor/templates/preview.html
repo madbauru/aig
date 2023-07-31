@@ -4,13 +4,9 @@
     <title>Visualização</title>
 </head>
 <body>
-    <h1>Visualização</h1>
-    {% if upload.product == 'EB' %}
-        <h2>{{ upload.ebook_title }}</h2>
-        <p>{{ upload.results }}</p>
-    {% elif upload.product == 'BP' %}
-        <h2>{{ upload.blog_post_title }}</h2>
-        <p>{{ upload.results }}</p>
-    {% endif %}
+   <h1>Visualização</h1>
+<p>{{ upload.ebook_title }}</p>
+<p>{{ upload.blog_title }}</p>
+<p>{{ upload.generated_content }}</p>
 </body>
 </html>
