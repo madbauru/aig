@@ -7,12 +7,13 @@
     <h1>Escolha o Produto</h1>
     <form method="post">
         {% csrf_token %}
-        <label for="product_choice">Escolha o tipo de produto que você deseja gerar:</label><br>
-        <input type="radio" id="ebook" name="product_choice" value="ebook">
-        <label for="ebook">E-book</label><br>
-        <input type="radio" id="blog_post" name="product_choice" value="blog_post">
-        <label for="blog_post">Post de Blog</label><br>
-        <input type="submit" value="Escolher">
+        <label for="product">Escolha o produto:</label>
+        <select id="product" name="product">
+            <option value="EB">E-book</option>
+            <option value="BP">Blog Post</option>
+            <!-- Adicione mais opções aqui conforme necessário -->
+        </select>
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
