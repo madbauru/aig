@@ -4,6 +4,10 @@ from django.http import HttpResponseRedirect
 import requests
 from bs4 import BeautifulSoup
 import textract
+import openai
+import os
+
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def index(request):
     if request.method == 'POST':
@@ -18,12 +22,6 @@ def index(request):
 def progress(request):
     # Obtenha o último upload do usuário
     upload = Upload.objects.last()
-
-    # Processar o arquivo e a URL
-    # Aqui você pode adicionar o código para processar o arquivo e a URL
-    # Por exemplo, se você estiver usando uma biblioteca de processamento de texto como NLTK ou SpaCy, você pode adicionar o código aqui
-    # Se você estiver usando uma biblioteca de web scraping como Beautiful Soup ou Scrapy, você pode adicionar o código aqui
-    # Se você estiver usando uma biblioteca de IA como TensorFlow ou PyTorch, você pode adicionar o código aqui
 
     # Web scraping da URL
     if upload.url:
@@ -52,6 +50,17 @@ def progress(request):
         # Por exemplo:
         # upload.results = results
         # upload.save()
+
+    # Use GPT-3 para gerar o conteúdo do e-book ou post de blog
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=upload.results,
+        temperature=0.5,
+        max_tokens=1000
+    )
+
+    upload.generated_content = response.choices[0].text.strip()
+    upload.save()
 
     # Renderizar a página de progresso
     return render(request, 'progress.html')
