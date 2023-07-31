@@ -15,6 +15,7 @@ def index(request):
         url = request.POST['url']
         upload = Upload(file=file, url=url)
         upload.save()
+        print("Upload realizado com sucesso.")
         return HttpResponseRedirect('/progress')
     else:
         return render(request, 'index.html')
@@ -25,42 +26,32 @@ def progress(request):
 
     # Web scraping da URL
     if upload.url:
-        response = requests.get(upload.url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+        print("Iniciando web scraping da URL...")
+        try:
+            response = requests.get(upload.url)
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Remover cabeçalho, rodapé e barra lateral
-        for tag in soup.find_all(['header', 'footer', 'sidebar', 'nav', 'aside']):
-            tag.decompose()
+            # Remover cabeçalho, rodapé e barra lateral
+            for tag in soup.find_all(['header', 'footer', 'sidebar', 'nav', 'aside']):
+                tag.decompose()
 
-        # Extrair todo o texto do corpo
-        text = ' '.join(soup.body.stripped_strings)
-        upload.results = text
-        upload.save()
+            # Extrair todo o texto do corpo
+            text = ' '.join(soup.body.stripped_strings)
+            upload.results = text
+            upload.save()
+            print("Web scraping concluído com sucesso.")
+        except Exception as e:
+            print(f"Erro durante o web scraping: {e}")
 
     # Processar o arquivo
     if upload.file:
-        # Ler o arquivo
-        file_content = textract.process(upload.file.path)
-
-        # Aqui você pode adicionar o código para processar o conteúdo do arquivo
-        # Por exemplo, se você estiver usando uma biblioteca de processamento de texto como NLTK ou SpaCy, você pode adicionar o código aqui
-        # Se você estiver usando uma biblioteca de IA como TensorFlow ou PyTorch, você pode adicionar o código aqui
-
-        # Após o processamento, você pode salvar os resultados em um campo do modelo Upload
-        # Por exemplo:
-        # upload.results = results
-        # upload.save()
-
-    # Use GPT-3 para gerar o conteúdo do e-book ou post de blog
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=upload.results,
-        temperature=0.5,
-        max_tokens=1000
-    )
-
-    upload.generated_content = response.choices[0].text.strip()
-    upload.save()
+        print("Iniciando processamento do arquivo...")
+        try:
+            # Ler o arquivo
+            file_content = textract.process(upload.file.path)
+            print("Processamento do arquivo concluído com sucesso.")
+        except Exception as e:
+            print(f"Erro durante o processamento do arquivo: {e}")
 
     # Renderizar a página de progresso
     return render(request, 'progress.html')
@@ -85,7 +76,7 @@ def customize(request):
         upload = Upload.objects.last()
 
         # Atualize o campo do título do e-book com o título enviado pelo usuário
-        upload.ebook_title = request.POST['ebook_title']
+        upload.title = request.POST['title']
         upload.save()
 
         # Redirecione o usuário para a página de visualização
